@@ -1,0 +1,180 @@
+/* ==========================================================
+   Alice's portfolio – shared styles
+   ----------------------------------------------------------
+   The original site is laid out on a 1366px-wide canvas that
+   scales with the browser width. We do the same: every
+   element is positioned with --x / --y / --w / --h (in
+   "design pixels") and multiplied by --u (= 1 design pixel).
+   To nudge something, just edit its --x / --y / --w / --h /
+   --fs values in the HTML.
+   ========================================================== */
+
+:root {
+  --bg: #f5f2f2;
+  --ink: #000;
+
+  /* Fonts (Helios Extended isn't on Google Fonts, so Archivo
+     at its widest setting is used as the closest match). */
+  --font-script: "Pinyon Script", cursive;
+  --font-wide:   "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body:   "Be Vietnam Pro", "Be Vietnam", Arial, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+
+a { color: inherit; }
+p, h1, h2 { margin: 0; font-weight: 400; }
+
+/* ---------- canvas / sections ---------- */
+.stage { container-type: inline-size; width: 100%; overflow-x: hidden; }
+
+.section {
+  --u: calc(100cqw / 1366);               /* 1 design pixel */
+  position: relative;
+  width: 100%;
+  height: calc(var(--h) * var(--u));
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.el {
+  position: absolute;
+  left:   calc(var(--x) * var(--u));
+  top:    calc(var(--y) * var(--u));
+  width:  calc(var(--w) * var(--u));
+  height: calc(var(--h) * var(--u));
+  font-size: calc(var(--fs, 20) * var(--u));
+}
+
+/* ---------- text styles ---------- */
+.script { font-family: var(--font-script); text-align: center; line-height: 0.83; }
+.hero-title { line-height: 0.83; }
+.portfolios-title { line-height: 1; }
+
+.wide {
+  font-family: var(--font-wide);
+  font-stretch: 125%;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-align: center;
+}
+
+.body-text {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  text-align: justify;
+  line-height: 1.375;
+}
+
+.sans-title {
+  font-family: var(--font-wide);
+  font-stretch: 125%;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+/* the word that sits behind the big script word */
+.gap-word { color: var(--bg); }
+
+.big-word { line-height: 1.195; }
+
+.label, .small-link {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.375;
+  white-space: nowrap;
+}
+.small-link a { text-decoration: underline; }
+
+/* ---------- images ---------- */
+.photo { display: block; object-fit: cover; }
+.hero-photo { border-radius: calc(97.3 * var(--u)); border: calc(1.5 * var(--u)) solid #000; }
+.card-photo { border-radius: calc(38.7 * var(--u)); border: calc(1.5 * var(--u)) solid #000; }
+.tall-photo { border-radius: calc(70.9 * var(--u)); border: calc(1.5 * var(--u)) solid #000; }
+.photo.plain { border-radius: 0; border: 0; }
+
+.embed { border: 0; display: block; background: #fff; }
+
+/* ---------- home: oval buttons ---------- */
+.oval {
+  border: calc(4 * var(--u)) solid #000;
+  border-radius: 50%;
+}
+.oval-text {
+  position: absolute;
+  left:  calc(49.4 * var(--u) - 4 * var(--u));
+  top:   calc(70.9 * var(--u) - 4 * var(--u));
+  width: calc(364.5 * var(--u));
+  text-align: center;
+  letter-spacing: -0.03em;
+}
+.oval-title { font-size: calc(30.67 * var(--u)); line-height: calc(31 * var(--u)); font-weight: 800; text-decoration: underline; }
+.oval-sub   { margin-top: calc(19 * var(--u)); font-size: calc(24 * var(--u)); line-height: calc(24 * var(--u)); }
+.oval-sub a { text-decoration: none; }
+
+/* ---------- home: icons ---------- */
+.icon { display: block; color: #000; }
+.icon svg { width: 100%; height: 100%; display: block; }
+.icon-img { display: block; }
+
+/* ---------- sub pages: back button ---------- */
+.pill {
+  display: flex; align-items: center; justify-content: center;
+  border: calc(4 * var(--u)) solid #000;
+  border-radius: 50%;
+  font-family: var(--font-body);
+  font-size: calc(20 * var(--u));
+  letter-spacing: -0.03em;
+  text-decoration: underline;
+  text-align: center;
+  line-height: 1.04;
+}
+
+/* ==========================================================
+   ANIMATIONS
+   ========================================================== */
+
+/* HOME: every component slides DOWN into place, one after another.
+   The order comes from each element's data-i attribute in index.html. */
+@keyframes drop-in {
+  from { opacity: 0; transform: translateY(-60px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.drop {
+  opacity: 0;
+  animation: drop-in 0.8s cubic-bezier(0.22, 0.8, 0.3, 1) forwards;
+}
+/* stagger: 0.12s between components. Change 0.12s to speed up/slow down the wave. */
+.drop[data-i="0"]  { animation-delay: calc(0  * 0.12s); }
+.drop[data-i="1"]  { animation-delay: calc(1  * 0.12s); }
+.drop[data-i="2"]  { animation-delay: calc(2  * 0.12s); }
+.drop[data-i="3"]  { animation-delay: calc(3  * 0.12s); }
+.drop[data-i="4"]  { animation-delay: calc(4  * 0.12s); }
+.drop[data-i="5"]  { animation-delay: calc(5  * 0.12s); }
+.drop[data-i="6"]  { animation-delay: calc(6  * 0.12s); }
+.drop[data-i="7"]  { animation-delay: calc(7  * 0.12s); }
+.drop[data-i="8"]  { animation-delay: calc(8  * 0.12s); }
+.drop[data-i="9"]  { animation-delay: calc(9  * 0.12s); }
+.drop[data-i="10"] { animation-delay: calc(10 * 0.12s); }
+.drop[data-i="11"] { animation-delay: calc(11 * 0.12s); }
+
+/* PAGES 2 & 3: only the title slides down, once, on load.
+   The sans title and the big script word move together as one unit.
+   Distance scales with the page width so it feels the same on any screen. */
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(calc(-70 * var(--u))); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide-down {
+  animation: slide-down 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drop, .slide-down { animation: none; opacity: 1; transform: none; }
+}
